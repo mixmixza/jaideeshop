@@ -8,7 +8,18 @@
     $price = $_POST['txtPrice'];
     $unintInStock = $_POST['txtStock'];
 
-    $sql = "UPDATE product SET name='$name', description='$description', price=$price, unintInStock=$unintInStock WHERE id=$pid";
+    //update picture
+    $picture=$_POST['hdnProductPic'];
+    if($_FILES["filepic"]["name"]!=""){
+        //ถ้าอัปโหลดไฟล์เข้ามา ให้เก็บชื่อไฟล์ไว้ Update ด้วย
+        $picture=$_FILES["filepic"]["name"];
+
+        //Move file
+        move_uploaded_file($_FILES["filepic"]["tmp_name"],"img/product/".$_FILES["filepic"]["name"]);
+    }
+    
+    
+    $sql = "UPDATE product SET name='$name', description='$description', price=$price, unintInStock=$unintInStock,picture='$picture' WHERE id=$pid";
 
     //echo $sql;
     $result=$con->query($sql);

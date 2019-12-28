@@ -18,7 +18,7 @@
         $desc = $_POST['txtDescription'];
         $price = $_POST['txtPrice'];
         $stock = $_POST['txtStock'];
-        $picture = $_POST["filepic"];
+        $filename = $_FILES["filepic"]['name'];
         //echo  "Type: ". $_FILES["filepic"]["type"]. "<br>";
         //echo  "Name: ". $_FILES["filepic"]["name"]. "<br>";
         //echo  "Size: ". $_FILES["filepic"]["size"]. "<br>";

@@ -83,70 +83,91 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <div class="jumbotron">
-            <h1>Jaidee Shop5555</h1>
-            <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Id animi maxime beatae iusto deleniti corrupti ducimus temporibus dicta quibusdam quidem! Dolores accusamus doloremque perspiciatis corrupti aperiam ipsum dignissimos eius adipisci?</p>
-        </div>
-    </div>
-    <div class="container">
+   <div class="container">
         <div class="row">
-        <?php
-            $sql = "SELECT * FROM product ORDER BY id";
-            $result = $con->query($sql);
-                    if(!$result){
-                        echo "ERROR ";
-                    }
-                    else{
-                while($prd=$result->fetch_object()){
-                    //$prd->id; //$prd["id"];
-        ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                    <div class="thumbnail">
-                    <a href="productdetail.php?pid=<?php echo $prd->id; ?>">
-                        <img src="img/product/<?php echo $prd->picture; ?>" alt="">
-                    </a>
-                        <div class="caption">
-                            <h3><?php echo $prd->name; ?></h3>
-                                <p><?php echo $prd->description; ?></p>
-                                <p>
-                                    <strong>Price: <?php echo $prd->price ?></strong>
-                                </p>
-                                <p>
-                                    <a href="#" class="btn btn-success ">
-                                        <i class="glyphicon glyphicon-shopping-cart"></i>
-                                    </a>
-                                    <a href="editproduct.php?pid=<?php echo $prd->id ?>" class="btn btn-waring">
-                                        <i class="glyphicon glyphicon-pencil"></i> 
-                                    </a>
-                                    <a href="deleteproduct.php?pid=<?php echo $prd->id ?>" class="btn btn-danger lnkDelete">
-                                        <i class="glyphicon glyphicon-trash" id="lnkDelete"></i> 
-                                    </a>
-                                </p>
+            <h2>Search Product</h2>
+            <div class="col-md-12">
+            <form action="" method="post">
+                    <div class="form-group">
+                    <div class="col-md-2">
+                    <select name="searchCol" id="" class="form-control btn-warning">
+                    <option value="0">กรุณาเลือกรายการ</option>
+                    <option value="1">ชื่อสินค้า</option>
+                    <option value="2">รายละเอียด</option>
+                    <option value="3">ราคาสินค้าสูงสุด</option>
+                    </select>
+                    </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="txtSearch" placeholder="กรอกข้อมูล">
                         </div>
+                        <div class="col-md-2">
+                            <button name="submit" class="btn btn-block btn-success">
+                                <i class="glyphicon glyphicon-search"></i> Go!
+                            </button>
+                            </div>
+                                           
+</form>
+        </div>
+</div>
+        <?php
+            if(isset($_POST['submit'])){
+                $search = $_POST['txtSearch'];
+                $searchCol = $_POST['searchCol'];
+                $sql = "SELECT * FROM product ";
+                switch($searchCol){
+                    case 1:{
+                        $sql.="WHERE name LIKE '%$search%'";
+                        break;
+                    }
+                    case 2:{
+                        $sql.="WHERE description LIKE '%$search%'";
+                        break;
+                    }
+                    case 3:{
+                        $sql.="WHERE price <= $search";
+                        break;
+                    }
+                }
+                
+        ?><br>
+       
+            <div class="row" style="margin-left :20px"><br>
+            <h2>Search : <?php echo $search?></h2>
+                <div class="col-md-12"><br>
+                <?php
+                $result = $con->query($sql);
+                if(!$result){
+                    echo "ERROR " . $con->error;
+                }
+                else{
+            while($prd=$result->fetch_object()){
+                //$prd->id; //$prd["id"];
+    ?>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <div class="thumbnail">
+                <a href="productdetail.php?pid=<?php echo $prd->id; ?>">
+                    <img src="img/product/<?php echo $prd->picture; ?>" alt="">
+                </a>
+                    <div class="caption">
+                        <h3><?php echo $prd->name; ?></h3>
+                            <p><?php echo $prd->description; ?></p>
+                            <p>
+                                <strong>Price: <?php echo $prd->price ?></strong>
+                            </p>
                     </div>
                 </div>
-            <?php
-                }
+            </div>
+        <?php
             }
-            ?>
-                
-        </div>
-    </div>
+        }
+        ?>
+                </div>
+            </div>
+        <?php
+            }
+        ?>
+   </div>
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function(){
-        $(".lnkDelete").click(function(){
-            if(confirm("Confirm delete?")){
-                return true;
-            }else{
-                return false;
-            }
-            //return confirm("Confirm Delete");
-            });
-        });
-
-    </script>
 </body>
 </html>
